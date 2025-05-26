@@ -2,6 +2,7 @@ package com.humanbooster;
 
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -26,7 +27,14 @@ public class TaskResource {
     @GET
     @Path("/{id}")
     public TaskDTO getById(@PathParam("id") int id) {
-        return dao.read(id).toDTO();
+        Task task = dao.read(id);
+        if (task == null) {
+            throw new WebApplicationException(
+                    "Task not found",
+                    Response.Status.NOT_FOUND
+            );
+        }
+        return task.toDTO();
     }
 
     @POST
