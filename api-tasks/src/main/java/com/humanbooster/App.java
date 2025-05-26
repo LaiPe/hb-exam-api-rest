@@ -1,5 +1,10 @@
 package com.humanbooster;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -12,7 +17,7 @@ import java.time.LocalDate;
  * Hello world!
  */
 public class App {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
                 .configure()
                 .build();
@@ -20,17 +25,14 @@ public class App {
         Metadata metadata = new MetadataSources(registry).buildMetadata();
         SessionFactory sessionFactory = metadata.buildSessionFactory();
 
-        TaskDAO taskDAO = new TaskDAO(sessionFactory);
 
-        Task task = new Task();
-        task.setTitle("Ma nouvelle tâche");
-        task.setDescription("");
-        task.setCreatedAt(LocalDate.now());
-        task.setUpdatedAt(LocalDate.now());
-        taskDAO.create(task);
-
-        Task taskRead = taskDAO.read(task.getId());
-        System.out.println(taskRead.getTitle());
+        ResourceConfig config = new ApiApplication();
+        ServletHolder servlet = new ServletHolder(new ServletContainer(config));
+        Server server = new Server(8080);
+        ServletContextHandler context = new ServletContextHandler(server, "/");
+        context.addServlet(servlet, "/*");
+        server.start();
+        server.join();
 
     }
 }

@@ -70,4 +70,15 @@ public class Task {
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+    public TaskDTO toDTO() {
+        TaskDTO dto = new TaskDTO();
+        dto.setId(id);
+        dto.setTitle(title);
+        dto.setDescription(description);
+        dto.setCreatedAt(createdAt);
+        dto.setUpdatedAt(updatedAt);
+
+        return dto;
+    }
 }

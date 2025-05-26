@@ -1,0 +1,27 @@
+GET http://localhost:8080/tasks
+Content-Type: */*
+###
+
+GET http://localhost:8080/tasks/2
+Content-Type: */*
+###
+
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+    "title" : "Tâche très importante",
+    "description" : "Je dois faire qqlch de très important."
+}
+###
+
+PUT http://localhost:8080/tasks/2
+Content-Type: application/json
+
+{
+  "title" : "Ma tache modifiée",
+  "description" : "blablabla"
+}
+###
+
+DELETE http://localhost:8080/tasks/1
